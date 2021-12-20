@@ -1,7 +1,7 @@
 # BoincLogAnalyzer
 This app obtains the BOINC job log data files for analysis
 
-Screen shot: https://stateson.net/images/LogAnalyzerDemo.jpg
+Screen shot: https://stateson.net/bthistory/LogAnalyzerDemo.jpg
 
 xAxis is 0..number of points
 
