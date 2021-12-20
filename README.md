@@ -1,4 +1,4 @@
-# BoincLogAnalyzer
+# BoincLogAnalyzer - VS2019 Windows only
 This app obtains the BOINC job log data files for analysis
 
 Screen shot: https://stateson.net/bthistory/LogAnalyzerDemo.jpg
