@@ -26,3 +26,5 @@ Future possibilities requiring a BOINC client or manager change
 1 - Show GPU time if the boinc client or manager logs GPU time
 
 2 - Show GPU name and ID that processe the work unit (not logged by BOINC)
+
+The 7z file contains 32 and 64 bit code
