@@ -29,7 +29,9 @@ namespace BoincLogAnalyzer
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.btn_PlotEVA = new System.Windows.Forms.Button();
@@ -45,7 +47,8 @@ namespace BoincLogAnalyzer
             this.rbShowAll = new System.Windows.Forms.RadioButton();
             this.tv = new System.Windows.Forms.TreeView();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.TimerShowBuild = new System.Windows.Forms.Timer(this.components);
+            this.btnAbout = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.gb_Reveal.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -61,12 +64,22 @@ namespace BoincLogAnalyzer
             this.groupBox1.Controls.Add(this.lb_DataDir);
             this.groupBox1.Controls.Add(this.clb_lognames);
             this.groupBox1.Controls.Add(this.btn_FetchLogs);
-            this.groupBox1.Location = new System.Drawing.Point(21, 28);
+            this.groupBox1.Location = new System.Drawing.Point(22, 65);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(598, 429);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Log File Selections";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.SystemColors.Info;
+            this.label2.Location = new System.Drawing.Point(434, 173);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(103, 26);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "Double click an item\r\nto view in notepad";
             // 
             // label1
             // 
@@ -235,21 +248,29 @@ namespace BoincLogAnalyzer
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "List of Projects";
             // 
-            // label2
+            // TimerShowBuild
             // 
-            this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.SystemColors.Info;
-            this.label2.Location = new System.Drawing.Point(434, 173);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(103, 26);
-            this.label2.TabIndex = 7;
-            this.label2.Text = "Double click an item\r\nto view in notepad";
+            this.TimerShowBuild.Enabled = true;
+            this.TimerShowBuild.Interval = 1000;
+            this.TimerShowBuild.Tick += new System.EventHandler(this.TimerShowBuild_Tick);
+            // 
+            // btnAbout
+            // 
+            this.btnAbout.Location = new System.Drawing.Point(259, 12);
+            this.btnAbout.Name = "btnAbout";
+            this.btnAbout.Size = new System.Drawing.Size(99, 23);
+            this.btnAbout.TabIndex = 9;
+            this.btnAbout.Text = "ABOUT / HELP";
+            this.btnAbout.UseVisualStyleBackColor = true;
+            this.btnAbout.Visible = false;
+            this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
             // 
             // BoincLogAnalyzer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1135, 589);
+            this.Controls.Add(this.btnAbout);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -283,6 +304,8 @@ namespace BoincLogAnalyzer
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Timer TimerShowBuild;
+        private System.Windows.Forms.Button btnAbout;
     }
 }
 

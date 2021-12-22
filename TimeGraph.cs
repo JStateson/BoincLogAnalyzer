@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -8,14 +10,18 @@ namespace BoincLogAnalyzer
 {
     public partial class cTimeGraph : Form
     {
-
-        static Random rnd;
+      
+        //static Random rnd;
         double timeStamp = 0.0;
         int itimeStamp = 0;
         int jtimeStamp = 0;
         public TreeNode mainNode;
         private bool bAllowCallback = false;  // allow combo box to show data when changed
-        
+
+        cAdvFilter MyAdvFilter = new cAdvFilter();
+        private cLogFileInfo OneRec; // this is the currently plotting display
+        private int OneRecBits;      // also used by the plot three
+        private int OneRecSelIndex;  // the index value (listbox) that selected the record
 
         private cLogFileInfo ScrollOneRec;
         private int ScrollBits; // this is the 1,2,4 bit set to indicate what y axis to plot
@@ -42,6 +48,8 @@ namespace BoincLogAnalyzer
         const int ut = 2;
         const int et = 4;
 
+      
+        // tag added so can use notepad to look
         private void BuildTree()
         {
             TreeNode a, b;
@@ -57,16 +65,19 @@ namespace BoincLogAnalyzer
                 b.Name = "ue";
                 b.Text = "Est Time";
                 b.Checked = true;
+                b.Tag = j;
                 a.Nodes.Add(b);
                 b = new TreeNode();
                 b.Name = "ut";
                 b.Text = "CPU time";
                 b.Checked = true;
+                b.Tag = j;
                 a.Nodes.Add(b);
                 b = new TreeNode();
                 b.Name = "et";
                 b.Text = "Elapsed";
                 b.Checked = true;
+                b.Tag = j;
                 a.Nodes.Add(b);
                 mainNode.Nodes.Add(a);
             }
@@ -102,6 +113,7 @@ namespace BoincLogAnalyzer
             {
                 return;
             }
+
             iLocRecSelected = new List<int>();
             bLocRecSelected = new List<int>();
             CountGraphsWanted();
@@ -138,6 +150,7 @@ namespace BoincLogAnalyzer
             return Convert.ToDouble(iVal);
         }
 
+        // not needed any more I suspect
         private double NoNegLog(double val)
         {
             if (!cb_ylog.Checked) return val;
@@ -145,10 +158,65 @@ namespace BoincLogAnalyzer
             return val;
         }
 
-        // there is 1 x-axis and (up to)3 y-axis
-        private void CreateThreeSeries(int n, int iBit)
+        private bool bProcessFilter(string strName)
+        {
+            if (cbUseAdvFilter.Checked)
+            {
+                if (MyAdvFilter.bContains)
+                {
+                    return !(strName.Contains(MyAdvFilter.strPhrase));
+                }
+                else
+                {
+                    return (strName.Contains(MyAdvFilter.strPhrase));
+                }
+            }
+            return false;
+        }
+
+        private void HideData(bool bUnhide)
         {
             int m;
+            bool bHid;
+            m = OneRec.RawData.Count;
+            OneRec.NumHidden = 0;
+            for(int i=0; i < m; i++)
+            {
+                if(bUnhide)
+                {
+                    OneRec.RawData[i].bUserHide = false;
+                }
+                else
+                {
+                    string strAppName = OneRec.RawData[i].strTaskName;
+                    bHid = bProcessFilter(strAppName);
+                    OneRec.RawData[i].bUserHide = bHid;
+                    if (bHid)
+                        OneRec.NumHidden++;
+                }
+            }
+        }
+
+        private void CreateThreeSeries(int n, int iBit)
+        {
+            OneRec = alr[n];
+            OneRecBits = iBit;
+            PLotTheThreeSeries();
+        }
+
+        double ExBits(ref double yMax, int id,  double dPoint)
+        {
+            if ((OneRecBits & id) > 0) yMax = Math.Max(yMax, dPoint);
+            return dPoint;
+        }
+
+        // there is 1 x-axis and (up to)3 y-axis
+        /// </summary>
+        /// <param name="n"></param> is index into project table of data
+        /// <param name="iBit"></param> a bit set to determine which yaxis point to plot
+        private void PLotTheThreeSeries()
+        {
+            int m, iBit = OneRecBits;
             double SetUnity; // sets last value of x axis to 1.0
             double yMax = 0;    // maximum extent of y axis
             foreach (var series in tgraph.Series)
@@ -159,14 +227,17 @@ namespace BoincLogAnalyzer
             {
                 tgraph.Series.RemoveAt(0);
             }
-            
+
             tgraph.ChartAreas[0].AxisX.Minimum = 0;
             tgraph.ChartAreas[0].AxisX.Maximum = 1.0;
             tgraph.ChartAreas[0].AxisX.ScaleView.Size = 1.0 / (1.0 + Convert.ToDouble(nudScollCnt.Value));
             tgraph.ChartAreas[0].AxisX.ScrollBar.Size = 10;
             tgraph.ChartAreas[0].AxisY.IsLogarithmic = cb_ylog.Checked;
-            cLogFileInfo OneRec = alr[n];
+
+
             m = OneRec.RawData.Count;
+            if (cbUseAdvFilter.Checked)
+                HideData(false);
             SetUnity = OneRec.RawData[m - 1].dTimeCompleted;
             ThisSeriesData = new cGraphInfo();
             ThisSeriesData.STime = new List<double>();
@@ -174,20 +245,19 @@ namespace BoincLogAnalyzer
             ThisSeriesData.secDET = new List<double>();
             ThisSeriesData.secDUE = new List<double>();
 
-            yMax = 0;
-            if ((iBit & ut) > 0) yMax = Math.Max(yMax, OneRec.dYElapsedCPU);
-            if ((iBit & et) > 0) yMax = Math.Max(yMax, OneRec.dYElapsedTime);
-            if ((iBit & ue) > 0) yMax = Math.Max(yMax, OneRec.dYEstimateRT);
-
+            // need to know the high points so the graph had a high point that is visible at THE TOP
+            OneRec.dYElapsedCPU = 0;
+            OneRec.dYElapsedTime = 0;
+            OneRec.dYEstimateRT = 0;
+            SetUnity = 0;
             for (int i = 0; i < m; i++)
             {
-                SetUnity = i;
-                // ThisSeriesData.STime.Add(OneRec.RawData[i].dTimeCompleted / SetUnity);
+                if (OneRec.RawData[i].bUserHide) continue;
                 ThisSeriesData.STime.Add(SetUnity / m);
-                // todo remove NoNegLog when data tagged as error
-                ThisSeriesData.secDCT.Add(NoNegLog(OneRec.RawData[i].dElapsedCPU));
-                ThisSeriesData.secDET.Add(NoNegLog(OneRec.RawData[i].dElapsedTime));
-                ThisSeriesData.secDUE.Add(NoNegLog(OneRec.RawData[i].dEstimateRT));
+                ThisSeriesData.secDCT.Add(ExBits(ref OneRec.dYElapsedCPU, ut, OneRec.RawData[i].dElapsedCPU));
+                ThisSeriesData.secDET.Add(ExBits(ref OneRec.dYElapsedTime, et, OneRec.RawData[i].dElapsedTime));
+                ThisSeriesData.secDUE.Add(ExBits(ref OneRec.dYEstimateRT, ue, OneRec.RawData[i].dEstimateRT));
+                SetUnity++;
             }
             if((iBit & ut) > 0)
             {
@@ -197,7 +267,7 @@ namespace BoincLogAnalyzer
                 tgraph.Series["CPU"].Points.DataBindXY(
                     ThisSeriesData.STime.ToArray(),
                     ThisSeriesData.secDCT.ToArray());
-
+                yMax = Math.Max(yMax,OneRec.dYElapsedCPU);
             }
             if((iBit & et) > 0)
             {
@@ -207,6 +277,7 @@ namespace BoincLogAnalyzer
                 tgraph.Series["ET"].Points.DataBindXY(
                     ThisSeriesData.STime.ToArray(),
                     ThisSeriesData.secDET.ToArray());
+                yMax = Math.Max(yMax, OneRec.dYElapsedTime);
             }
 
             if((iBit & ue)> 0)
@@ -217,6 +288,7 @@ namespace BoincLogAnalyzer
                 tgraph.Series["EST"].Points.DataBindXY(
                     ThisSeriesData.STime.ToArray(),
                     ThisSeriesData.secDUE.ToArray());
+                yMax = Math.Max(yMax, OneRec.dYEstimateRT);
             }
             tgraph.ChartAreas[0].AxisY.Maximum = GetNiceScale(yMax);
         }
@@ -245,25 +317,31 @@ namespace BoincLogAnalyzer
                 }
 
             }
+
+            // may want to remove one of the y axis while scrolling if easy
             if (timer_ScrollData.Enabled) // we may be scrolling
             {
+                /* 
                 int new_index=0;
                 int new_bits = 0;
                 GetRecordIndex(ref new_index, ref new_bits);
                 if(new_index == iScrolling)
                 {
-                    //ScrollBits = new_bits;
+                    ScrollBits = new_bits;
                 }
+                */
             }
         }
 
         // the item selected in the combo drop down box:  need location in database
-        private void GetRecordIndex(ref int irec, ref int iBit)
+        // also need the index to the log file in the list box
+        private int GetRecordIndex(ref int irec, ref int iBit)
         {
             int i = cb_SelData.SelectedIndex;
-            if (i < 0) return;
+            if (i < 0) return -1;
             irec = iLocRecSelected[i];
             iBit = bLocRecSelected[i];
+            return i;
         }
 
         private void btn_ShowData_Click(object sender, EventArgs e)
@@ -272,20 +350,35 @@ namespace BoincLogAnalyzer
             PlotAtOnce();
         }
 
-        public void PlotAtOnce()
+        // return the index to the list box as it might need to be restored
+        public int PlotAtOnce()
         {
             int i = 0;
             int j = 0;
-            GetRecordIndex(ref i, ref j);
+            int k = GetRecordIndex(ref i, ref j);
             CreateThreeSeries(i, j);
+            return k;
+        }
+
+
+        private void btn_Pause_Click(object sender, EventArgs e)
+        {
+            timer_ScrollData.Enabled = !timer_ScrollData.Enabled;
+            btn_Pause.Text = timer_ScrollData.Enabled ? "Pause" : "Un-Pause";
         }
 
         private void btn_ScrollData_Click(object sender, EventArgs e)
         {
 
-            if (timer_ScrollData.Enabled)
+            if (timer_ScrollData.Enabled) // but may be paused!
             {
                 ClearScrolling(); // this disables timer
+                return;
+            }
+            if(btn_Pause.Text == "Un-Pause")
+            {
+                btn_Pause.Text = "Pause";
+                ClearScrolling();
                 return;
             }
             ClearScrolling();
@@ -392,31 +485,79 @@ namespace BoincLogAnalyzer
             ClearScrolling();
         }
 
-        private void btn_Pause_Click(object sender, EventArgs e)
-        {
-            timer_ScrollData.Enabled = !timer_ScrollData.Enabled;
-            btn_Pause.Text = timer_ScrollData.Enabled ? "Pause" : "Un-Pause";
-        }
 
+        
         private void gtv_AfterCheck(object sender, TreeViewEventArgs e)
         {
+            bool bLast = bAllowCallback;
+            bAllowCallback = false;
             CountGraphsWanted();
+            cb_SelData.SelectedIndex = OneRecSelIndex;
+            bAllowCallback = bLast;
         }
 
-        private void gtv_AfterSelect(object sender, TreeViewEventArgs e)
-        {
 
-        }
 
         private void cb_SelData_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(bAllowCallback)
+            if (bAllowCallback)
+            {
                 PlotAtOnce();
+                OneRecSelIndex = cb_SelData.SelectedIndex;
+            }
         }
 
         private void nudScollCnt_ValueChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnAdvFilter_Click(object sender, EventArgs e)
+        {
+
+            AdvFilter adfForm = new AdvFilter(ref MyAdvFilter);
+            adfForm.ShowDialog();
+            adfForm.Dispose();
+            if (MyAdvFilter.strPhrase != "")
+            {
+                string strTemp = (MyAdvFilter.bContains ? "contains " : " does not contain") + MyAdvFilter.strPhrase;
+                lblFilterString.Text = strTemp;
+                cbUseAdvFilter.Enabled = true;
+            }
+            else
+            {
+                cbUseAdvFilter.Checked = false;
+                cbUseAdvFilter.Enabled = false;
+            }
+            cbUseAdvFilter.Checked |= MyAdvFilter.bOKreturn;
+        }
+
+        private void btn_invertFilter_Click(object sender, EventArgs e)
+        {
+            if (OneRec == null) return;  // no file selected yet
+            MyAdvFilter.bContains = !MyAdvFilter.bContains;
+            HideData(false);
+            PLotTheThreeSeries();
+        }
+
+        private void cbUseAdvFilter_CheckedChanged(object sender, EventArgs e)
+        {
+            if (OneRec == null) return;  // no file selected yet
+            if (cbUseAdvFilter.Checked)
+                HideData(false);
+            else HideData(true); // this unhides
+            PLotTheThreeSeries();
+        }
+
+        private void btn_NotepadFile_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void gtv_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            int n = Convert.ToInt32(e.Node.Tag);
+            string strPath = alr[n].strPath;
+            Process.Start("notepad.exe", strPath);
         }
     }
 }

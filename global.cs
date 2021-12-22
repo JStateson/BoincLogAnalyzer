@@ -3,9 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace BoincLogAnalyzer
 {
+
+    public class cAdvFilter
+    {
+        public string strPhrase;
+        public bool bContains;
+        public int NumExcluded;
+        public bool bOKreturn;
+    }
+
     public class cLogFileData
     {
         public double dTimeCompleted; // unix timestamp
@@ -19,19 +29,22 @@ namespace BoincLogAnalyzer
 
     public class cLogFileInfo
     {
-        public string strName;
+        public string strName;      // this is the project name
+        public string strPath;      // where to find the file
         public bool bFoundInAFL;   //  if in the original table in boinc folder
         public int iFoundInAFL;    //  index into treeview where project is located
         public UInt64 TimeZero;    // start here rest of time is relative
         public bool bSelected;
         public int iNumErrors;  // any time that is 0 or less is an error
+        public int NumHidden;   // if any hidden by filter
         public double dYElapsedTime;   //et largest value and used for y axis
         public double dYEstimateRT;    // estimated runtime
         public double dYElapsedCPU;    //ct
         public List<cLogFileData> RawData;
-        public void init(string sName, bool bSel, bool bFound, int iFound)
+        public void init(string sName,string sPath, bool bSel, bool bFound, int iFound)
         {
             strName = sName;
+            strPath = sPath;
             bSelected = bSel;
             bFoundInAFL = bFound;
             iFoundInAFL = iFound;

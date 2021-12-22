@@ -117,7 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="TimerShowBuild.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="label4.Text" xml:space="preserve">
+    <value>Assume the following two dataset names
+de_modfit_80_bundle4_4s_south4s_bgset_2_1564052102_19713940_1
+de_modfit_14_bundle4_testing_3s4f_3_1564052102_19538584_1
+
+If you want to see results for all "testing" use the phrase "test" and check "Contain"
+If you want all results except "south" then use that phrase and select "Do Not Contain"
+
+Any part of the phrase is OK.  Regex is not implemented.</value>
+  </data>
 </root>

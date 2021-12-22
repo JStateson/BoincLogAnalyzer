@@ -15,7 +15,7 @@ The data file can be reviewed with notepad by double clicking the log filename
 
 Things to be done
 
-1 - Add filter such as plot only work unit names containing a phrase ie: "test"
+1 - Allow more complex filtering such as "A" or "B" or ... "Z"
 
 2 - Want to show idle time where the log stopped and restarted
 

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Microsoft.Win32;
 using System.IO;
 using System.Diagnostics;
+using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 //1519063720 ue 2918.681295 ct 659.250000 fe 525000000000000
 //nm LATeah0054L_1084.0_0_0.0_13540195_2 et 666.475706 es 0
 /* 
@@ -44,6 +45,14 @@ namespace BoincLogAnalyzer
         }
         public static eShowType ShowType = eShowType.eShowAllcol;
 
+        private string GetSimpleDate(string sDT)
+        {
+            //Sun 06/09/2019 23:33:53.18 
+            int i = sDT.IndexOf(' ');
+            i++;
+            int j = sDT.LastIndexOf('.');
+            return sDT.Substring(i, j - i);
+        }
 
         private void GetDataPath()
         {
@@ -65,7 +74,8 @@ namespace BoincLogAnalyzer
                     }
                 }
             }
-            catch (Exception ex)              {
+            catch (Exception ex)   
+            {
                 //react appropriately
             }
         }
@@ -239,7 +249,7 @@ namespace BoincLogAnalyzer
 /*
 1272759891 ue 39812.500926 ct 29498.120000 fe 1821052114462310 nm ap_09oc06aa_B0_P0_00042_20100501_11249.wu_3 et 33044.911001
 0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
-          1          2          3          4          5          6          7          8          9          0          1    
+          1         2         3         4         5         6         7         8         9         0         1    
 */
 
         private bool ParseLogLine(ref string[] RecOut, string strIn)
@@ -295,7 +305,7 @@ namespace BoincLogAnalyzer
                 strProjNameShort = GetProjectName(strFN, ref iFound);
                 //Debug.Assert(iFound < 0);
                 bFound = "unk" != tv.Nodes[iFound].Tag.ToString();
-                lfi.init(strProjNameShort, true, bFound, iFound);
+                lfi.init(strProjNameShort, strFN, true, bFound, iFound);
 
                 bool bFirst = true;
                 foreach (string strRecord in LinesHistory)
@@ -316,13 +326,13 @@ namespace BoincLogAnalyzer
                         time_t_Completed = Convert.ToUInt64(Record[0]) - lfi.TimeZero;
                         lfd.dTimeCompleted = Convert.ToDouble(time_t_Completed);
                         lfd.dEstimateRT = StrToDouble(Record[2],ref bError);
-                        lfi.dYEstimateRT = Math.Max(lfd.dEstimateRT, lfi.dYEstimateRT);
+                        //lfi.dYEstimateRT = Math.Max(lfd.dEstimateRT, lfi.dYEstimateRT);
                         lfd.dElapsedCPU = StrToDouble(Record[4], ref bError);
-                        lfi.dYElapsedCPU = Math.Max(lfd.dElapsedCPU, lfi.dYElapsedCPU);
+                        //lfi.dYElapsedCPU = Math.Max(lfd.dElapsedCPU, lfi.dYElapsedCPU);
                         // no need for flops yet
                         lfd.strTaskName = Record[8];
                         lfd.dElapsedTime = StrToDouble(Record[10],ref bError);
-                        lfi.dYElapsedTime = Math.Max(lfd.dElapsedTime, lfi.dYElapsedTime);
+                        //lfi.dYElapsedTime = Math.Max(lfd.dElapsedTime, lfi.dYElapsedTime);
                         lfd.bBadPoint = bError;
 
                         lfi.RawData.Add(lfd);
@@ -367,6 +377,18 @@ namespace BoincLogAnalyzer
         {
             string strSelected =PathLogFiles[clb_lognames.SelectedIndex];
             Process.Start("notepad.exe", strSelected);
+        }
+
+        private void TimerShowBuild_Tick(object sender, EventArgs e)
+        {
+            TimerShowBuild.Enabled = false;
+           // this.Text = "BoincLogAnalyzer " + GetSimpleDate(Properties.Resources.BuildDate) + " (v) 0.9";
+        }
+
+        private void btnAbout_Click(object sender, EventArgs e)
+        {
+            MyAbout myAbout = new MyAbout();
+            myAbout.ShowDialog();
         }
     }
 }

@@ -43,8 +43,6 @@ namespace BoincLogAnalyzer
 
     public bool ReadProjectList(string str_DataDir, ref cProjectNames pNames)
         {
-            int j=0;
-
             //           FileStream fs = new FileStream(str_DataDir + "\\acct_mgr_request.xml", FileMode.Open, FileAccess.Read);
             FileStream fs = new FileStream(str_DataDir + "\\all_projects_list.xml", FileMode.Open, FileAccess.Read);
 
