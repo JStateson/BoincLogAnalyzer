@@ -29,14 +29,13 @@ namespace BoincLogAnalyzer
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.tb_BoincDataPath = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.btn_PlotEVA = new System.Windows.Forms.Button();
             this.btn_RunAnal = new System.Windows.Forms.Button();
-            this.lb_DataDir = new System.Windows.Forms.Label();
             this.clb_lognames = new System.Windows.Forms.CheckedListBox();
             this.btn_FetchLogs = new System.Windows.Forms.Button();
             this.gb_Reveal = new System.Windows.Forms.GroupBox();
@@ -47,7 +46,6 @@ namespace BoincLogAnalyzer
             this.rbShowAll = new System.Windows.Forms.RadioButton();
             this.tv = new System.Windows.Forms.TreeView();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.TimerShowBuild = new System.Windows.Forms.Timer(this.components);
             this.btnAbout = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.gb_Reveal.SuspendLayout();
@@ -56,12 +54,12 @@ namespace BoincLogAnalyzer
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.tb_BoincDataPath);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.listBox1);
             this.groupBox1.Controls.Add(this.btn_PlotEVA);
             this.groupBox1.Controls.Add(this.btn_RunAnal);
-            this.groupBox1.Controls.Add(this.lb_DataDir);
             this.groupBox1.Controls.Add(this.clb_lognames);
             this.groupBox1.Controls.Add(this.btn_FetchLogs);
             this.groupBox1.Location = new System.Drawing.Point(22, 65);
@@ -70,6 +68,14 @@ namespace BoincLogAnalyzer
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Log File Selections";
+            // 
+            // tb_BoincDataPath
+            // 
+            this.tb_BoincDataPath.Location = new System.Drawing.Point(192, 31);
+            this.tb_BoincDataPath.Name = "tb_BoincDataPath";
+            this.tb_BoincDataPath.Size = new System.Drawing.Size(182, 20);
+            this.tb_BoincDataPath.TabIndex = 8;
+            this.tb_BoincDataPath.Text = "c:\\ProgramData\\Boinc";
             // 
             // label2
             // 
@@ -122,15 +128,6 @@ namespace BoincLogAnalyzer
             this.btn_RunAnal.Text = "Analyze Selected";
             this.btn_RunAnal.UseVisualStyleBackColor = true;
             this.btn_RunAnal.Click += new System.EventHandler(this.btn_RunAnal_Click);
-            // 
-            // lb_DataDir
-            // 
-            this.lb_DataDir.AutoSize = true;
-            this.lb_DataDir.Location = new System.Drawing.Point(141, 36);
-            this.lb_DataDir.Name = "lb_DataDir";
-            this.lb_DataDir.Size = new System.Drawing.Size(115, 13);
-            this.lb_DataDir.TabIndex = 2;
-            this.lb_DataDir.Text = "c:\\ProgramData\\Boinc";
             // 
             // clb_lognames
             // 
@@ -248,12 +245,6 @@ namespace BoincLogAnalyzer
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "List of Projects";
             // 
-            // TimerShowBuild
-            // 
-            this.TimerShowBuild.Enabled = true;
-            this.TimerShowBuild.Interval = 1000;
-            this.TimerShowBuild.Tick += new System.EventHandler(this.TimerShowBuild_Tick);
-            // 
             // btnAbout
             // 
             this.btnAbout.Location = new System.Drawing.Point(259, 12);
@@ -262,7 +253,6 @@ namespace BoincLogAnalyzer
             this.btnAbout.TabIndex = 9;
             this.btnAbout.Text = "ABOUT / HELP";
             this.btnAbout.UseVisualStyleBackColor = true;
-            this.btnAbout.Visible = false;
             this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
             // 
             // BoincLogAnalyzer
@@ -290,7 +280,6 @@ namespace BoincLogAnalyzer
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckedListBox clb_lognames;
         private System.Windows.Forms.Button btn_FetchLogs;
-        private System.Windows.Forms.Label lb_DataDir;
         private System.Windows.Forms.TreeView tv;
         private System.Windows.Forms.GroupBox gb_Reveal;
         private System.Windows.Forms.RadioButton rbShowStats;
@@ -304,8 +293,8 @@ namespace BoincLogAnalyzer
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Timer TimerShowBuild;
         private System.Windows.Forms.Button btnAbout;
+        private System.Windows.Forms.TextBox tb_BoincDataPath;
     }
 }
 

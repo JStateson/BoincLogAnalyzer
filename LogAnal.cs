@@ -11,6 +11,7 @@ using Microsoft.Win32;
 using System.IO;
 using System.Diagnostics;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
+
 //1519063720 ue 2918.681295 ct 659.250000 fe 525000000000000
 //nm LATeah0054L_1084.0_0_0.0_13540195_2 et 666.475706 es 0
 /* 
@@ -34,6 +35,7 @@ namespace BoincLogAnalyzer
         public cProjectNames ProjectNameTable;
         public List<cLogFileInfo> AllLogRecords;
         private List<string> PathLogFiles;
+
 
         public enum eShowType
         {
@@ -66,11 +68,11 @@ namespace BoincLogAnalyzer
                     Object o = key.GetValue("DATADIR");
                     if (o != null)
                     {
-                        lb_DataDir.Text = o.ToString();
+                        tb_BoincDataPath.Text = o.ToString();
                         ofd_history.DefaultExt = ".txt";
                         ofd_history.Filter = "Log Files|job_log_*.txt";
                         ofd_history.Multiselect = true;
-                        ofd_history.InitialDirectory = lb_DataDir.Text;
+                        ofd_history.InitialDirectory = tb_BoincDataPath.Text;
                     }
                 }
             }
@@ -83,11 +85,13 @@ namespace BoincLogAnalyzer
         public BoincLogAnalyzer()
         {
             InitializeComponent();
+            
+            this.Text += " Build:" + Properties.Resources.BuildDate.ToString();
             GetDataPath();
             MyPT = new ProjectTree();
             ProjectNameTable = new cProjectNames();
             ProjectNameTable.init();
-            MyPT.ReadProjectList(lb_DataDir.Text, ref  ProjectNameTable);
+            MyPT.ReadProjectList(tb_BoincDataPath.Text, ref  ProjectNameTable);
             MyPT.FormTreeFromNames(ref tv, ref ProjectNameTable);
             tv.Show();
         }
@@ -102,7 +106,7 @@ namespace BoincLogAnalyzer
             foreach(string strName in ofd_history.FileNames)
             {
                 PathLogFiles.Add(strName);
-                clb_lognames.Items.Add(strName.Replace(lb_DataDir.Text, ""), true);
+                clb_lognames.Items.Add(strName.Replace(tb_BoincDataPath.Text, ""), true);
             }
             BuildNameTable();
         }
@@ -379,11 +383,7 @@ namespace BoincLogAnalyzer
             Process.Start("notepad.exe", strSelected);
         }
 
-        private void TimerShowBuild_Tick(object sender, EventArgs e)
-        {
-            TimerShowBuild.Enabled = false;
-           // this.Text = "BoincLogAnalyzer " + GetSimpleDate(Properties.Resources.BuildDate) + " (v) 0.9";
-        }
+
 
         private void btnAbout_Click(object sender, EventArgs e)
         {

@@ -30,8 +30,8 @@ namespace BoincLogAnalyzer
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             this.tgraph = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.btn_ShowData = new System.Windows.Forms.Button();
             this.cb_ylog = new System.Windows.Forms.CheckBox();
@@ -44,29 +44,30 @@ namespace BoincLogAnalyzer
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btn_NotepadFile = new System.Windows.Forms.Button();
             this.nudScollCnt = new System.Windows.Forms.NumericUpDown();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.btnAdvFilter = new System.Windows.Forms.Button();
             this.btn_invertFilter = new System.Windows.Forms.Button();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.cbUseAdvFilter = new System.Windows.Forms.CheckBox();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.lblFilterString = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.tgraph)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudScollCnt)).BeginInit();
-            this.groupBox3.SuspendLayout();
             this.groupBox7.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tgraph
             // 
-            chartArea6.Name = "ChartArea1";
-            this.tgraph.ChartAreas.Add(chartArea6);
-            legend6.Name = "Legend1";
-            this.tgraph.Legends.Add(legend6);
+            chartArea1.Name = "ChartArea1";
+            this.tgraph.ChartAreas.Add(chartArea1);
+            legend1.Name = "Legend1";
+            this.tgraph.Legends.Add(legend1);
             this.tgraph.Location = new System.Drawing.Point(289, 12);
             this.tgraph.Name = "tgraph";
             this.tgraph.Size = new System.Drawing.Size(500, 400);
@@ -129,7 +130,6 @@ namespace BoincLogAnalyzer
             this.gtv.TabIndex = 12;
             this.toolTip1.SetToolTip(this.gtv, "Check or Uncheck desired data view");
             this.gtv.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.gtv_AfterCheck);
-            this.gtv.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.gtv_NodeMouseDoubleClick);
             // 
             // cb_SelData
             // 
@@ -138,6 +138,7 @@ namespace BoincLogAnalyzer
             this.cb_SelData.Name = "cb_SelData";
             this.cb_SelData.Size = new System.Drawing.Size(219, 21);
             this.cb_SelData.TabIndex = 13;
+            this.cb_SelData.Tag = "xxx";
             this.toolTip1.SetToolTip(this.cb_SelData, "Use up or donw cursor to view next or previous graph");
             this.cb_SelData.SelectedIndexChanged += new System.EventHandler(this.cb_SelData_SelectedIndexChanged);
             // 
@@ -147,9 +148,9 @@ namespace BoincLogAnalyzer
             this.label1.BackColor = System.Drawing.SystemColors.Info;
             this.label1.Location = new System.Drawing.Point(12, 64);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(191, 26);
+            this.label1.Size = new System.Drawing.Size(154, 13);
             this.label1.TabIndex = 14;
-            this.label1.Text = "Use checkbox to select graphs\r\nDouble click to view data with notepad";
+            this.label1.Text = "Use checkbox to select graphs\r\n";
             // 
             // groupBox1
             // 
@@ -175,6 +176,7 @@ namespace BoincLogAnalyzer
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.btn_NotepadFile);
             this.groupBox2.Controls.Add(this.nudScollCnt);
             this.groupBox2.Controls.Add(this.btn_ShowData);
             this.groupBox2.Controls.Add(this.cb_SelData);
@@ -184,6 +186,17 @@ namespace BoincLogAnalyzer
             this.groupBox2.TabIndex = 16;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Project Select";
+            // 
+            // btn_NotepadFile
+            // 
+            this.btn_NotepadFile.Location = new System.Drawing.Point(156, 103);
+            this.btn_NotepadFile.Name = "btn_NotepadFile";
+            this.btn_NotepadFile.Size = new System.Drawing.Size(75, 23);
+            this.btn_NotepadFile.TabIndex = 18;
+            this.btn_NotepadFile.Text = "View Data";
+            this.toolTip1.SetToolTip(this.btn_NotepadFile, "Uses notepod to view raw data");
+            this.btn_NotepadFile.UseVisualStyleBackColor = true;
+            this.btn_NotepadFile.Click += new System.EventHandler(this.btn_NotepadFile_Click);
             // 
             // nudScollCnt
             // 
@@ -224,6 +237,18 @@ namespace BoincLogAnalyzer
             this.btn_invertFilter.UseVisualStyleBackColor = true;
             this.btn_invertFilter.Click += new System.EventHandler(this.btn_invertFilter_Click);
             // 
+            // groupBox7
+            // 
+            this.groupBox7.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.groupBox7.Controls.Add(this.btnAdvFilter);
+            this.groupBox7.Location = new System.Drawing.Point(11, 92);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(194, 57);
+            this.groupBox7.TabIndex = 32;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Advanced Filter";
+            this.toolTip1.SetToolTip(this.groupBox7, "You may want to firest look at the raw data using notepad");
+            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.btn_invertFilter);
@@ -261,18 +286,6 @@ namespace BoincLogAnalyzer
             this.cbUseAdvFilter.UseVisualStyleBackColor = false;
             this.cbUseAdvFilter.CheckedChanged += new System.EventHandler(this.cbUseAdvFilter_CheckedChanged);
             // 
-            // groupBox7
-            // 
-            this.groupBox7.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.groupBox7.Controls.Add(this.btnAdvFilter);
-            this.groupBox7.Location = new System.Drawing.Point(11, 92);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(194, 57);
-            this.groupBox7.TabIndex = 32;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "Advanced Filter";
-            this.toolTip1.SetToolTip(this.groupBox7, "You may want to firest look at the raw data using notepad");
-            // 
             // lblFilterString
             // 
             this.lblFilterString.AutoSize = true;
@@ -304,9 +317,9 @@ namespace BoincLogAnalyzer
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.nudScollCnt)).EndInit();
+            this.groupBox7.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            this.groupBox7.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -335,5 +348,6 @@ namespace BoincLogAnalyzer
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btn_invertFilter;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btn_NotepadFile;
     }
 }

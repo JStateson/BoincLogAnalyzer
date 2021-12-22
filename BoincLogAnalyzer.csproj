@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{F8080594-6044-41F0-99FF-2AD8338F3823}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>BoincLogAnalizer</RootNamespace>
-    <AssemblyName>BoincLogAnalizer</AssemblyName>
+    <RootNamespace>BoincLogAnalyzer</RootNamespace>
+    <AssemblyName>BoincLogAnalyzer</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -88,7 +88,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>boinc.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\boinc.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
@@ -142,6 +142,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="TimeGraph.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -197,8 +198,13 @@
     <None Include="Resources\boinc.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="boinc.ico" />
     <None Include="Resources\BuildDate.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\boinc_logo.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\boinc_logo_33.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

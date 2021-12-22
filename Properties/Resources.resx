@@ -121,6 +121,12 @@
   <data name="boinc" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\boinc.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="boinc_logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\boinc_logo.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="boinc_logo_33" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\boinc_logo_33.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="BuildDate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\BuildDate.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>

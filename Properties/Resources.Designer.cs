@@ -71,7 +71,27 @@ namespace BoincLogAnalyzer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tue 12/21/2021 11:38:16.91 
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap boinc_logo {
+            get {
+                object obj = ResourceManager.GetObject("boinc_logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap boinc_logo_33 {
+            get {
+                object obj = ResourceManager.GetObject("boinc_logo_33", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wed 12/22/2021 11:12:14.08 
         ///.
         /// </summary>
         internal static string BuildDate {

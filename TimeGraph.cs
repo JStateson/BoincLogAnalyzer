@@ -313,7 +313,9 @@ namespace BoincLogAnalyzer
                     cb_SelData.Items.Add(tn.Text);
                     
                     if (cb_SelData.SelectedIndex < 0)
+                    {
                         cb_SelData.SelectedIndex = 0;
+                    }
                 }
 
             }
@@ -549,14 +551,22 @@ namespace BoincLogAnalyzer
             PLotTheThreeSeries();
         }
 
-        private void btn_NotepadFile_Click(object sender, EventArgs e)
+        // lookup the project name and get the path to the filename
+        private string GetPathFromName(string strPN)
         {
+            foreach (cLogFileInfo lfi in alr)
+            {
+                if (lfi.strName == strPN)
+                {
+                    return lfi.strPath;
+                }
+            }
+            return "";
         }
 
-        private void gtv_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void btn_NotepadFile_Click(object sender, EventArgs e)
         {
-            int n = Convert.ToInt32(e.Node.Tag);
-            string strPath = alr[n].strPath;
+            string strPath = GetPathFromName(cb_SelData.SelectedItem.ToString());
             Process.Start("notepad.exe", strPath);
         }
     }
