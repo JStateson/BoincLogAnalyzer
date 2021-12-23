@@ -217,9 +217,9 @@ namespace BoincLogAnalyzer
             // 
             // btnAdvFilter
             // 
-            this.btnAdvFilter.Location = new System.Drawing.Point(17, 22);
+            this.btnAdvFilter.Location = new System.Drawing.Point(20, 19);
             this.btnAdvFilter.Name = "btnAdvFilter";
-            this.btnAdvFilter.Size = new System.Drawing.Size(75, 23);
+            this.btnAdvFilter.Size = new System.Drawing.Size(93, 23);
             this.btnAdvFilter.TabIndex = 0;
             this.btnAdvFilter.Text = "Create / Edit";
             this.toolTip1.SetToolTip(this.btnAdvFilter, "This is applied only when file is opened");

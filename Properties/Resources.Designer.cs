@@ -91,7 +91,7 @@ namespace BoincLogAnalyzer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Wed 12/22/2021 11:12:14.08 
+        ///   Looks up a localized string similar to Wed 12/22/2021 17:48:18.30 
         ///.
         /// </summary>
         internal static string BuildDate {

@@ -29,11 +29,14 @@ namespace BoincLogAnalyzer
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btn_UpdateDP = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tb_info = new System.Windows.Forms.TextBox();
             this.tb_BoincDataPath = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.listBox1 = new System.Windows.Forms.ListBox();
             this.btn_PlotEVA = new System.Windows.Forms.Button();
             this.btn_RunAnal = new System.Windows.Forms.Button();
             this.clb_lognames = new System.Windows.Forms.CheckedListBox();
@@ -47,6 +50,7 @@ namespace BoincLogAnalyzer
             this.tv = new System.Windows.Forms.TreeView();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnAbout = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox1.SuspendLayout();
             this.gb_Reveal.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -54,10 +58,12 @@ namespace BoincLogAnalyzer
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btn_UpdateDP);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.tb_info);
             this.groupBox1.Controls.Add(this.tb_BoincDataPath);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.listBox1);
             this.groupBox1.Controls.Add(this.btn_PlotEVA);
             this.groupBox1.Controls.Add(this.btn_RunAnal);
             this.groupBox1.Controls.Add(this.clb_lognames);
@@ -69,11 +75,43 @@ namespace BoincLogAnalyzer
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Log File Selections";
             // 
+            // btn_UpdateDP
+            // 
+            this.btn_UpdateDP.Location = new System.Drawing.Point(424, 56);
+            this.btn_UpdateDP.Name = "btn_UpdateDP";
+            this.btn_UpdateDP.Size = new System.Drawing.Size(75, 23);
+            this.btn_UpdateDP.TabIndex = 11;
+            this.btn_UpdateDP.Text = "Update";
+            this.btn_UpdateDP.UseVisualStyleBackColor = true;
+            this.btn_UpdateDP.Click += new System.EventHandler(this.btn_UpdateDP_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.SystemColors.Info;
+            this.label3.Location = new System.Drawing.Point(271, 16);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(114, 39);
+            this.label3.TabIndex = 10;
+            this.label3.Text = "Edit this box if location\r\nis not correct and click\r\nupdate to save";
+            // 
+            // tb_info
+            // 
+            this.tb_info.BackColor = System.Drawing.SystemColors.Info;
+            this.tb_info.Location = new System.Drawing.Point(237, 302);
+            this.tb_info.Multiline = true;
+            this.tb_info.Name = "tb_info";
+            this.tb_info.ReadOnly = true;
+            this.tb_info.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.tb_info.Size = new System.Drawing.Size(300, 110);
+            this.tb_info.TabIndex = 9;
+            this.tb_info.Text = "Errors and other info will be shown here";
+            // 
             // tb_BoincDataPath
             // 
-            this.tb_BoincDataPath.Location = new System.Drawing.Point(192, 31);
+            this.tb_BoincDataPath.Location = new System.Drawing.Point(391, 30);
             this.tb_BoincDataPath.Name = "tb_BoincDataPath";
-            this.tb_BoincDataPath.Size = new System.Drawing.Size(182, 20);
+            this.tb_BoincDataPath.Size = new System.Drawing.Size(201, 20);
             this.tb_BoincDataPath.TabIndex = 8;
             this.tb_BoincDataPath.Text = "c:\\ProgramData\\Boinc";
             // 
@@ -81,7 +119,7 @@ namespace BoincLogAnalyzer
             // 
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.SystemColors.Info;
-            this.label2.Location = new System.Drawing.Point(434, 173);
+            this.label2.Location = new System.Drawing.Point(434, 194);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(103, 26);
             this.label2.TabIndex = 7;
@@ -91,7 +129,7 @@ namespace BoincLogAnalyzer
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.SystemColors.Info;
-            this.label1.Location = new System.Drawing.Point(17, 72);
+            this.label1.Location = new System.Drawing.Point(17, 90);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(249, 52);
             this.label1.TabIndex = 6;
@@ -99,18 +137,10 @@ namespace BoincLogAnalyzer
     "ed.\r\nThen click \"Analyze Selected\". May take a while\r\nSelect \"Show Graphics\" whe" +
     "n it becomes enabled.";
             // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(270, 423);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(8, 4);
-            this.listBox1.TabIndex = 5;
-            // 
             // btn_PlotEVA
             // 
             this.btn_PlotEVA.Enabled = false;
-            this.btn_PlotEVA.Location = new System.Drawing.Point(20, 323);
+            this.btn_PlotEVA.Location = new System.Drawing.Point(20, 343);
             this.btn_PlotEVA.Name = "btn_PlotEVA";
             this.btn_PlotEVA.Size = new System.Drawing.Size(147, 23);
             this.btn_PlotEVA.TabIndex = 4;
@@ -121,7 +151,7 @@ namespace BoincLogAnalyzer
             // btn_RunAnal
             // 
             this.btn_RunAnal.Enabled = false;
-            this.btn_RunAnal.Location = new System.Drawing.Point(20, 282);
+            this.btn_RunAnal.Location = new System.Drawing.Point(20, 302);
             this.btn_RunAnal.Name = "btn_RunAnal";
             this.btn_RunAnal.Size = new System.Drawing.Size(100, 23);
             this.btn_RunAnal.TabIndex = 3;
@@ -132,14 +162,15 @@ namespace BoincLogAnalyzer
             // clb_lognames
             // 
             this.clb_lognames.FormattingEnabled = true;
-            this.clb_lognames.Location = new System.Drawing.Point(20, 138);
+            this.clb_lognames.Location = new System.Drawing.Point(20, 158);
             this.clb_lognames.Name = "clb_lognames";
-            this.clb_lognames.Size = new System.Drawing.Size(386, 94);
+            this.clb_lognames.Size = new System.Drawing.Size(386, 109);
             this.clb_lognames.TabIndex = 1;
             this.clb_lognames.DoubleClick += new System.EventHandler(this.clb_lognames_DoubleClick);
             // 
             // btn_FetchLogs
             // 
+            this.btn_FetchLogs.Enabled = false;
             this.btn_FetchLogs.Location = new System.Drawing.Point(20, 31);
             this.btn_FetchLogs.Name = "btn_FetchLogs";
             this.btn_FetchLogs.Size = new System.Drawing.Size(100, 23);
@@ -288,13 +319,16 @@ namespace BoincLogAnalyzer
         private System.Windows.Forms.RadioButton rbShowHis;
         private System.Windows.Forms.RadioButton rbShowAll;
         private System.Windows.Forms.Button btn_RunAnal;
-        private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Button btn_PlotEVA;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnAbout;
         private System.Windows.Forms.TextBox tb_BoincDataPath;
+        private System.Windows.Forms.TextBox tb_info;
+        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Button btn_UpdateDP;
+        private System.Windows.Forms.Label label3;
     }
 }
 
