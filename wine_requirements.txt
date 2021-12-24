@@ -1,0 +1,13 @@
+The 32 bit version of the app runs with the following
+wine version
+
+Wine 6.02
+Wine Gecko (32-bit)	The Wine Project	2.47.2
+Wine Gecko (64-bit)	The Wine Project	2.47.2
+Wine Mono Runtime	The Wine Project	5.1.1
+Wine Mono Windows Support	The Wine Project	5.1.1
+
+All the above was installed on 18.04 using this guide
+Installed wine using this guide:
+https://tecadmin.net/install-wine-on-ubuntu/
+
