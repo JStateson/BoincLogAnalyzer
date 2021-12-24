@@ -40,7 +40,6 @@ namespace BoincLogAnalyzer
             this.btn_Pause = new System.Windows.Forms.Button();
             this.gtv = new System.Windows.Forms.TreeView();
             this.cb_SelData = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -50,16 +49,26 @@ namespace BoincLogAnalyzer
             this.btnAdvFilter = new System.Windows.Forms.Button();
             this.btn_invertFilter = new System.Windows.Forms.Button();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.btnPRJ = new System.Windows.Forms.Button();
+            this.btnPrjCheck = new System.Windows.Forms.Button();
+            this.btnPrjUnc = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.tb_ItemsSelected = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.cbUseAdvFilter = new System.Windows.Forms.CheckBox();
             this.lblFilterString = new System.Windows.Forms.Label();
+            this.pbarLoading = new System.Windows.Forms.ProgressBar();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.btnES = new System.Windows.Forms.Button();
+            this.btnET = new System.Windows.Forms.Button();
+            this.btnCPU = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.tgraph)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudScollCnt)).BeginInit();
             this.groupBox7.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // tgraph
@@ -68,7 +77,7 @@ namespace BoincLogAnalyzer
             this.tgraph.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
             this.tgraph.Legends.Add(legend1);
-            this.tgraph.Location = new System.Drawing.Point(289, 12);
+            this.tgraph.Location = new System.Drawing.Point(393, 40);
             this.tgraph.Name = "tgraph";
             this.tgraph.Size = new System.Drawing.Size(500, 400);
             this.tgraph.TabIndex = 0;
@@ -88,7 +97,7 @@ namespace BoincLogAnalyzer
             // cb_ylog
             // 
             this.cb_ylog.AutoSize = true;
-            this.cb_ylog.Location = new System.Drawing.Point(26, 21);
+            this.cb_ylog.Location = new System.Drawing.Point(253, 65);
             this.cb_ylog.Name = "cb_ylog";
             this.cb_ylog.Size = new System.Drawing.Size(99, 17);
             this.cb_ylog.TabIndex = 9;
@@ -124,9 +133,9 @@ namespace BoincLogAnalyzer
             // gtv
             // 
             this.gtv.CheckBoxes = true;
-            this.gtv.Location = new System.Drawing.Point(12, 93);
+            this.gtv.Location = new System.Drawing.Point(12, 144);
             this.gtv.Name = "gtv";
-            this.gtv.Size = new System.Drawing.Size(198, 257);
+            this.gtv.Size = new System.Drawing.Size(340, 257);
             this.gtv.TabIndex = 12;
             this.toolTip1.SetToolTip(this.gtv, "Check or Uncheck desired data view");
             this.gtv.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.gtv_AfterCheck);
@@ -142,22 +151,12 @@ namespace BoincLogAnalyzer
             this.toolTip1.SetToolTip(this.cb_SelData, "Use up or donw cursor to view next or previous graph");
             this.cb_SelData.SelectedIndexChanged += new System.EventHandler(this.cb_SelData_SelectedIndexChanged);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.SystemColors.Info;
-            this.label1.Location = new System.Drawing.Point(12, 64);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(154, 13);
-            this.label1.TabIndex = 14;
-            this.label1.Text = "Use checkbox to select graphs\r\n";
-            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.btn_Pause);
             this.groupBox1.Controls.Add(this.btn_ScrollData);
-            this.groupBox1.Location = new System.Drawing.Point(289, 418);
+            this.groupBox1.Location = new System.Drawing.Point(393, 446);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(177, 148);
             this.groupBox1.TabIndex = 15;
@@ -180,7 +179,7 @@ namespace BoincLogAnalyzer
             this.groupBox2.Controls.Add(this.nudScollCnt);
             this.groupBox2.Controls.Add(this.btn_ShowData);
             this.groupBox2.Controls.Add(this.cb_SelData);
-            this.groupBox2.Location = new System.Drawing.Point(521, 418);
+            this.groupBox2.Location = new System.Drawing.Point(625, 446);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(268, 148);
             this.groupBox2.TabIndex = 16;
@@ -213,7 +212,6 @@ namespace BoincLogAnalyzer
             this.nudScollCnt.Size = new System.Drawing.Size(42, 27);
             this.nudScollCnt.TabIndex = 17;
             this.toolTip1.SetToolTip(this.nudScollCnt, "How far beyond screen data can plot");
-            this.nudScollCnt.ValueChanged += new System.EventHandler(this.nudScollCnt_ValueChanged);
             // 
             // btnAdvFilter
             // 
@@ -249,19 +247,61 @@ namespace BoincLogAnalyzer
             this.groupBox7.Text = "Advanced Filter";
             this.toolTip1.SetToolTip(this.groupBox7, "You may want to firest look at the raw data using notepad");
             // 
+            // btnPRJ
+            // 
+            this.btnPRJ.Location = new System.Drawing.Point(6, 83);
+            this.btnPRJ.Name = "btnPRJ";
+            this.btnPRJ.Size = new System.Drawing.Size(95, 23);
+            this.btnPRJ.TabIndex = 0;
+            this.btnPRJ.Text = "Project Invert";
+            this.toolTip1.SetToolTip(this.btnPRJ, "Invert Project checks");
+            this.btnPRJ.UseVisualStyleBackColor = true;
+            this.btnPRJ.Click += new System.EventHandler(this.btnPRJ_Click);
+            // 
+            // btnPrjCheck
+            // 
+            this.btnPrjCheck.Location = new System.Drawing.Point(6, 50);
+            this.btnPrjCheck.Name = "btnPrjCheck";
+            this.btnPrjCheck.Size = new System.Drawing.Size(95, 23);
+            this.btnPrjCheck.TabIndex = 4;
+            this.btnPrjCheck.Text = "Project Check";
+            this.toolTip1.SetToolTip(this.btnPrjCheck, "Invert Project checks");
+            this.btnPrjCheck.UseVisualStyleBackColor = true;
+            this.btnPrjCheck.Click += new System.EventHandler(this.btnPrjCheck_Click);
+            // 
+            // btnPrjUnc
+            // 
+            this.btnPrjUnc.Location = new System.Drawing.Point(6, 18);
+            this.btnPrjUnc.Name = "btnPrjUnc";
+            this.btnPrjUnc.Size = new System.Drawing.Size(95, 23);
+            this.btnPrjUnc.TabIndex = 5;
+            this.btnPrjUnc.Text = "Project UnChk";
+            this.toolTip1.SetToolTip(this.btnPrjUnc, "Invert Project checks");
+            this.btnPrjUnc.UseVisualStyleBackColor = true;
+            this.btnPrjUnc.Click += new System.EventHandler(this.btnPrjUnc_Click);
+            // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.tb_ItemsSelected);
             this.groupBox3.Controls.Add(this.btn_invertFilter);
             this.groupBox3.Controls.Add(this.label2);
             this.groupBox3.Controls.Add(this.cbUseAdvFilter);
             this.groupBox3.Controls.Add(this.groupBox7);
             this.groupBox3.Controls.Add(this.lblFilterString);
-            this.groupBox3.Location = new System.Drawing.Point(15, 377);
+            this.groupBox3.Location = new System.Drawing.Point(15, 433);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(219, 189);
+            this.groupBox3.Size = new System.Drawing.Size(337, 161);
             this.groupBox3.TabIndex = 17;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Filters";
+            // 
+            // tb_ItemsSelected
+            // 
+            this.tb_ItemsSelected.Location = new System.Drawing.Point(222, 102);
+            this.tb_ItemsSelected.Multiline = true;
+            this.tb_ItemsSelected.Name = "tb_ItemsSelected";
+            this.tb_ItemsSelected.Size = new System.Drawing.Size(100, 38);
+            this.tb_ItemsSelected.TabIndex = 36;
             // 
             // label2
             // 
@@ -297,15 +337,70 @@ namespace BoincLogAnalyzer
             this.lblFilterString.TabIndex = 1;
             this.lblFilterString.Text = "reserved for filter";
             // 
+            // pbarLoading
+            // 
+            this.pbarLoading.Location = new System.Drawing.Point(12, 407);
+            this.pbarLoading.Maximum = 10;
+            this.pbarLoading.Name = "pbarLoading";
+            this.pbarLoading.Size = new System.Drawing.Size(340, 12);
+            this.pbarLoading.Step = 1;
+            this.pbarLoading.TabIndex = 18;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.btnPrjUnc);
+            this.groupBox4.Controls.Add(this.btnPrjCheck);
+            this.groupBox4.Controls.Add(this.btnES);
+            this.groupBox4.Controls.Add(this.btnET);
+            this.groupBox4.Controls.Add(this.btnCPU);
+            this.groupBox4.Controls.Add(this.btnPRJ);
+            this.groupBox4.Location = new System.Drawing.Point(12, 12);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(208, 118);
+            this.groupBox4.TabIndex = 19;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Check or Un-Check all";
+            // 
+            // btnES
+            // 
+            this.btnES.Location = new System.Drawing.Point(133, 83);
+            this.btnES.Name = "btnES";
+            this.btnES.Size = new System.Drawing.Size(47, 21);
+            this.btnES.TabIndex = 3;
+            this.btnES.Text = "ES";
+            this.btnES.UseVisualStyleBackColor = true;
+            this.btnES.Click += new System.EventHandler(this.btnES_Click);
+            // 
+            // btnET
+            // 
+            this.btnET.Location = new System.Drawing.Point(133, 51);
+            this.btnET.Name = "btnET";
+            this.btnET.Size = new System.Drawing.Size(47, 21);
+            this.btnET.TabIndex = 2;
+            this.btnET.Text = "ET";
+            this.btnET.UseVisualStyleBackColor = true;
+            this.btnET.Click += new System.EventHandler(this.btnET_Click);
+            // 
+            // btnCPU
+            // 
+            this.btnCPU.Location = new System.Drawing.Point(133, 20);
+            this.btnCPU.Name = "btnCPU";
+            this.btnCPU.Size = new System.Drawing.Size(47, 21);
+            this.btnCPU.TabIndex = 1;
+            this.btnCPU.Text = "CPU";
+            this.btnCPU.UseVisualStyleBackColor = true;
+            this.btnCPU.Click += new System.EventHandler(this.btnCPU_Click);
+            // 
             // cTimeGraph
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(824, 588);
+            this.ClientSize = new System.Drawing.Size(925, 617);
+            this.Controls.Add(this.groupBox4);
+            this.Controls.Add(this.pbarLoading);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.gtv);
             this.Controls.Add(this.cb_ylog);
             this.Controls.Add(this.tgraph);
@@ -320,6 +415,7 @@ namespace BoincLogAnalyzer
             this.groupBox7.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -335,7 +431,6 @@ namespace BoincLogAnalyzer
         private System.Windows.Forms.Button btn_Pause;
         private System.Windows.Forms.TreeView gtv;
         private System.Windows.Forms.ComboBox cb_SelData;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.ToolTip toolTip1;
@@ -349,5 +444,14 @@ namespace BoincLogAnalyzer
         private System.Windows.Forms.Button btn_invertFilter;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btn_NotepadFile;
+        private System.Windows.Forms.ProgressBar pbarLoading;
+        private System.Windows.Forms.TextBox tb_ItemsSelected;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Button btnCPU;
+        private System.Windows.Forms.Button btnPRJ;
+        private System.Windows.Forms.Button btnET;
+        private System.Windows.Forms.Button btnES;
+        private System.Windows.Forms.Button btnPrjCheck;
+        private System.Windows.Forms.Button btnPrjUnc;
     }
 }

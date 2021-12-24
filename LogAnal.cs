@@ -28,15 +28,15 @@ namespace BoincLogAnalyzer
 {
     public partial class BoincLogAnalyzer : Form
     {
-        private OpenFileDialog ofd_history;
+        private OpenFileDialog ofd_history; // used in windows but not in WINE (WINE bug?)
         private ProjectTree MyPT;
         public System.DateTime dt_1970 = new System.DateTime(1970, 1, 1);
 
         public cProjectNames ProjectNameTable;
         public List<cLogFileInfo> AllLogRecords;
         private List<string> PathLogFiles;
-
-        public bool bWine = true;
+        private DateTime tStop, tStart;
+        public bool bWine = true;   // if the BOINC registery key is found then bWine is false
         string strDPvalid;  // path to data file but has slash at end as required
 
         public enum eShowType
@@ -104,29 +104,49 @@ namespace BoincLogAnalyzer
 
         public BoincLogAnalyzer()
         {
+            tStart = DateTime.Now;
             InitializeComponent();
             string strSet = Properties.Resources.BuildDate.ToString();
-            strDPvalid = Properties.Settings.Default.DataPath;
-            if(!Directory.Exists(strDPvalid))
-            {
-                tb_info.Text = strDPvalid + " is not a path to a directory";
-                Properties.Settings.Default.DataPath = "empty";
-                strDPvalid = "empty";
-                btn_FetchLogs.Enabled = false;
-                return;
-            };
-            btn_FetchLogs.Enabled = true;
-            tb_BoincDataPath.Text = strDPvalid;
             this.Text += " Build:" + strSet;
             GetDataPath();
+            strDPvalid = Properties.Settings.Default.DataPath;
+            // if in linux then need to see where the data is
+            if(bWine)
+            {
+                if (!Directory.Exists(strDPvalid))
+                {
+                    tb_info.Visible = true;
+                    tb_info.Text = strDPvalid + " is not a path to a directory or does not exist\r\n";
+                    tb_info.Text += "Edit the top text box for the correct location\r\n";
+                    tb_info.Text += "and click the \"Update\" button then exit and restart\r\n";
+                    Properties.Settings.Default.DataPath = "empty";
+                    strDPvalid = "empty";
+                    btn_FetchLogs.Enabled = false;
+                    return;
+                };
+            }
+            btn_FetchLogs.Enabled = true;
+            tb_BoincDataPath.Text = strDPvalid;
+
             MyPT = new ProjectTree();
             ProjectNameTable = new cProjectNames();
             ProjectNameTable.init();
             MyPT.ReadProjectList(tb_BoincDataPath.Text, ref  ProjectNameTable);
             MyPT.FormTreeFromNames(ref tv, ref ProjectNameTable);
             tv.Show();
+            tStop = DateTime.Now;
+            TimeSpan tDiff = tStop - tStart;
+            //i9-7900 gtx2080 411 ms
+            //tb_info.Visible = true;
+            //tb_info.Text = "Elapsd Time (MS) " + tDiff.TotalMilliseconds.ToString();
         }
 
+
+        /*
+         * There are two outputs from this procedure
+         * PathLogFiles - list of project paths that can be opened to read
+         * clb_lognames.Items has the name of the project
+         */
         private void btn_FetchLogs_Click(object sender, EventArgs e)
         {
             int n;
@@ -168,7 +188,6 @@ namespace BoincLogAnalyzer
                     SaveDefaultSettings();
                 }
                 n = 0;
-//                ofd_history = new OpenFileDialog();
                 if (DialogResult.OK != ofd_history.ShowDialog()) return;
                 foreach (string strN in ofd_history.FileNames)
                 {
@@ -178,9 +197,8 @@ namespace BoincLogAnalyzer
                     clb_lognames.Items.Add(strTemp, true);
                     n++;
                 }
-
             }
-            tb_info.Text += "Obtained " + n.ToString() + " records at " + strDPvalid + "\r\n";
+            //tb_info.Text += "Obtained " + n.ToString() + " records at " + strDPvalid + "\r\n";
             btn_RunAnal.Enabled = true;
             BuildNameTable();
         }
@@ -297,37 +315,19 @@ namespace BoincLogAnalyzer
             bool bAnyUnknown = false;
             string strTemp;
 
-            if(bWine)
+            foreach (string strFN in PathLogFiles)
             {
-                foreach (string strFN in PathLogFiles)
+                int iFound = -1;
+                GetProjectName(strFN, ref iFound);
+                if (iFound < 0)
                 {
-                    int iFound = -1;
-                    GetProjectName(strFN, ref iFound);
-                    if (iFound < 0)
-                    {
-                        int i = strFN.IndexOf("job_log_");
-                        strTemp = strFN.Substring(i + 8).Replace(".txt", "");
-                        ProjectNameTable.AddUnknownNames(strFN, strTemp);
-                        bAnyUnknown = true;
-                    }
+                    int i = strFN.IndexOf("job_log_");
+                    strTemp = strFN.Substring(i + 8).Replace(".txt", "");
+                    ProjectNameTable.AddUnknownNames(strFN, strTemp);
+                    bAnyUnknown = true;
                 }
             }
-            else
-            {
-                foreach (string strFN in ofd_history.FileNames)
-                {
-                    int iFound = -1;
-                    GetProjectName(strFN, ref iFound);
-                    if (iFound < 0)
-                    {
-                        int i = strFN.IndexOf("job_log_");
-                        strTemp = strFN.Substring(i + 8).Replace(".txt", "");
-                        ProjectNameTable.AddUnknownNames(strFN, strTemp);
-                        bAnyUnknown = true;
-                    }
-                }
-            }
-            if(bAnyUnknown)
+            if (bAnyUnknown)
             {
                 MyPT.FormTreeFromNames(ref tv, ref ProjectNameTable);
                 tv.Show();
@@ -394,26 +394,25 @@ namespace BoincLogAnalyzer
             int iLinesRead = 0;
             string strProjNameShort; // name as best as we can find out
             string[] Record = "0 ue 2 ct 4 fe 6 nm WTF-OMG et 10 es 12".Split();
-            tb_info.Text += "Fetching: " + PathLogFiles.Count.ToString() + "\r\n";
+            //tb_info.Text += "Fetching: " + PathLogFiles.Count.ToString() + "\r\n";
 
             foreach (string strFN in PathLogFiles)
             { 
                 int iLineCnt = 0;
                 iLinesRead = 0;
                 cLogFileInfo lfi = new cLogFileInfo();
-                tb_info.Text += strFN + "\r\n";
+                //tb_info.Text += strFN + "\r\n";
                 LinesHistory = File.ReadAllLines(strFN);
                 iFound = -1;
                 strProjNameShort = GetProjectName(strFN, ref iFound);
                 bFound = "unk" != tv.Nodes[iFound].Tag.ToString();
                 lfi.init(strProjNameShort, strFN, true, bFound, iFound);
                 bool bFirst = true;
-                tb_info.Text += strProjNameShort + ": " + LinesHistory.Count().ToString() + "\r\n"; ;
+                //tb_info.Text += strProjNameShort + ": " + LinesHistory.Count().ToString() + "\r\n"; ;
                 foreach (string strRecord in LinesHistory)
                 {
                     bError = false;
                     string strTemp = strRecord.Trim();
-                    //string[] Record = strTemp.Split(' '); crap - cannot do this due to WTF filename
                     ParseLogLine(ref Record, strTemp);
                     cLogFileData lfd = new cLogFileData();
                     UInt64 time_t_Completed;
@@ -427,13 +426,10 @@ namespace BoincLogAnalyzer
                         time_t_Completed = Convert.ToUInt64(Record[0]) - lfi.TimeZero;
                         lfd.dTimeCompleted = Convert.ToDouble(time_t_Completed);
                         lfd.dEstimateRT = StrToDouble(Record[2],ref bError);
-                        //lfi.dYEstimateRT = Math.Max(lfd.dEstimateRT, lfi.dYEstimateRT);
                         lfd.dElapsedCPU = StrToDouble(Record[4], ref bError);
-                        //lfi.dYElapsedCPU = Math.Max(lfd.dElapsedCPU, lfi.dYElapsedCPU);
                         // no need for flops yet
                         lfd.strTaskName = Record[8];
                         lfd.dElapsedTime = StrToDouble(Record[10],ref bError);
-                        //lfi.dYElapsedTime = Math.Max(lfd.dElapsedTime, lfi.dYElapsedTime);
                         lfd.bBadPoint = bError;
                         iLinesRead++;
                         lfi.RawData.Add(lfd);
@@ -446,7 +442,7 @@ namespace BoincLogAnalyzer
                     }
                     iLineCnt++;
                 }
-                tb_info.Text += strProjNameShort + ": " + iLinesRead.ToString() + "\r\n";
+                //tb_info.Text += strProjNameShort + ": " + iLinesRead.ToString() + "\r\n";
                 AllLogRecords.Add(lfi);
             }
             return true;

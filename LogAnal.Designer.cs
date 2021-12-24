@@ -89,7 +89,7 @@ namespace BoincLogAnalyzer
             // 
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.SystemColors.Info;
-            this.label3.Location = new System.Drawing.Point(271, 16);
+            this.label3.Location = new System.Drawing.Point(234, 16);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(114, 39);
             this.label3.TabIndex = 10;
@@ -106,6 +106,7 @@ namespace BoincLogAnalyzer
             this.tb_info.Size = new System.Drawing.Size(300, 110);
             this.tb_info.TabIndex = 9;
             this.tb_info.Text = "Errors and other info will be shown here";
+            this.tb_info.Visible = false;
             // 
             // tb_BoincDataPath
             // 
